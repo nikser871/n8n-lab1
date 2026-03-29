@@ -1,0 +1,37 @@
+micronaut:
+  application:
+    name: my-app # Название вашего приложения
+  server:
+    port: 8080
+    cors:
+      enabled: true
+
+datasources:
+  default:
+    url: jdbc:postgresql://localhost:5434/news
+    username: your_username
+    password: your_password
+    driver-class-name: org.postgresql.Driver
+    # Настройки пула (Hikari)
+    maximum-pool-size: 10
+    minimum-idle: 2
+
+jpa:
+  default:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        hbm2ddl:
+          auto: update # Автоматическое создание/обновление таблиц (для дева)
+        show_sql: true # Логирование SQL-запросов
+        bytecode:
+          provider: none
+    entity-scan:
+      - 'com.examine.entity'
+
+
+# Настройки Jackson (JSON)
+jackson:
+  serialization:
+    indent_output: true
+    write_dates_as_timestamps: false
