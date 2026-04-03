@@ -35,3 +35,9 @@ jackson:
   serialization:
     indent_output: true
     write_dates_as_timestamps: false
+
+open-router:
+  api-key:
+
+qwen:
+  request: Сделай краткое саммари (3-5 предложений) по статье и верни Json вместе с id = %s и summary. Вот текст статьи %s
