@@ -20,5 +20,5 @@ public interface NewsRepository extends JpaRepository<News, String> {
     List<NewsForEnrichment> findNewsForAIEnrichment();
 
     @Query(value = "UPDATE news SET summary = :summary WHERE article_id = :id", nativeQuery = true )
-    void batchUpdateWithDifferentSummaries(@Parameter("id") String articleId, @Parameter("summary") String summary);
+    void updateWithSummary(@Parameter("id") String articleId, @Parameter("summary") String summary);
 }

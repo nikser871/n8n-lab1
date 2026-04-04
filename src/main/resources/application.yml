@@ -8,7 +8,7 @@ micronaut:
 
 datasources:
   default:
-    url: jdbc:postgresql://localhost:5434/news
+    url: jdbc:postgresql://localhost:5434/news?reWriteBatchedInserts=true
     username: your_username
     password: your_password
     driver-class-name: org.postgresql.Driver
@@ -20,7 +20,10 @@ jpa:
   default:
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
+        jdbc:
+          batch_size: 50            # Размер пачки
+          order_inserts: true       # Оптимизирует вставки
+          order_updates: true       # Оптимизирует апдейты
         hbm2ddl:
           auto: update # Автоматическое создание/обновление таблиц (для дева)
         show_sql: true # Логирование SQL-запросов
@@ -40,4 +43,5 @@ open-router:
   api-key:
 
 qwen:
-  request: Сделай краткое саммари (3-5 предложений) по статье и верни Json вместе с id = %s и summary. Вот текст статьи %s
+  header: Сделай краткое саммари (3-5 предложений) по статьям и верни JSON, в котором будем id и summary для каждого объекта\n\n
+  request:  Сделай краткое саммари (3-5 предложений) по статье и верни JSON, в котором будем id = %s ; summary = %s

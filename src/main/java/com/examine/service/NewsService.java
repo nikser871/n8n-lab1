@@ -3,7 +3,6 @@ package com.examine.service;
 import com.examine.dto.NewsDto;
 import com.examine.dto.NewsForEnrichment;
 import com.examine.dto.QwenResponse;
-import com.examine.entity.News;
 import com.examine.mapper.NewsMapper;
 import com.examine.repository.NewsRepository;
 import io.micronaut.transaction.annotation.Transactional;
@@ -11,6 +10,8 @@ import jakarta.inject.Singleton;
 import lombok.RequiredArgsConstructor;
 
 import java.util.*;
+
+import static java.util.Objects.isNull;
 
 /**
  * Сервис для работы с новостями
@@ -30,22 +31,22 @@ public class NewsService {
                 .toList();
     }
 
-    @Transactional
     public void enrichNewsWithSummaries() {
         List<NewsForEnrichment> newsForEnrichments = repository.findNewsForAIEnrichment();
         List<QwenResponse> responses = qwenService.getSummaries(newsForEnrichments);
 
-        if (Objects.isNull(responses)) return;
+        if (isNull(responses)) return;
 
-        List<String> articleIds = new ArrayList<>();
-        List<String> summaries = new ArrayList<>();
+        saveAiResults(responses);
+    }
 
+    @Transactional
+    protected void saveAiResults(List<QwenResponse> responses) {
         for (var response : responses) {
-            articleIds.add(response.articleId());
-            summaries.add(response.summary());
+            if (response != null && response.summary() != null) {
+                repository.updateWithSummary(response.articleId(), response.summary());
+            }
         }
-
-//        repository.batchUpdateWithDifferentSummaries(articleIds, summaries);
     }
 
 }
