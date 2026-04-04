@@ -35,7 +35,7 @@ public class QwenService {
     @Value("${qwen.request}")
     private String REQUEST_MESSAGE;
 
-    @Value("${open-router.api-key}")
+    @Value("${open-router.api-key:''}")
     private String API_KEY;
 
     private static final ObjectMapper mapper = new ObjectMapper();
@@ -47,6 +47,7 @@ public class QwenService {
      */
     public List<QwenResponse> getSummaries(List<NewsForEnrichment> news) {
 //        List<String> texts = getAllArticlesTexts(news);
+
         try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
             List<Future<QwenResponse>> futures = news.stream()
                     .map(item -> executor.submit(() -> callQwenApi(item)))
@@ -87,7 +88,7 @@ public class QwenService {
         String textFromParser = parser.getTextFromNew(item.link());
 
         if (isNull(textFromParser))
-            return null;
+            return new QwenResponse(item.id(), null);
 
         String prompt = String.format(REQUEST_MESSAGE, item.id(), textFromParser);
         ChatRequest request = ChatRequest.builder()

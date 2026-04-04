@@ -1,6 +1,7 @@
 package com.examine.entity;
 
 import com.examine.dto.enums.Source;
+import com.examine.entity.enums.EnrichmentStatus;
 import io.micronaut.serde.annotation.Serdeable;
 import jakarta.persistence.*;
 import lombok.*;
@@ -36,4 +37,8 @@ public class News {
 
     @Column(name = "extracted_at")
     private LocalDateTime extractedAt;
+
+    @Column(name = "enrichment_status")
+    @Enumerated(EnumType.STRING)
+    private EnrichmentStatus status = EnrichmentStatus.NEW;
 }
