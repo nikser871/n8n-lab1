@@ -51,16 +51,19 @@ public class QwenService {
     public List<QwenResponse> getSummaries(List<NewsForEnrichment> news) {
 //        List<String> texts = getAllArticlesTexts(news);
 
+        log.info("model {}", MODEL);
+
         try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
             List<Future<QwenResponse>> futures = news.stream()
                     .map(item -> executor.submit(() -> callQwenApi(item)))
                     .toList();
 
-            return futures.stream()
+            return futures.parallelStream()
                     .map(future -> {
                         try {
                             return future.get(2, TimeUnit.MINUTES); // Здесь поток блокируется, но это "дешево" для Virtual Thread
                         } catch (Exception e) {
+                            future.cancel(true);
                             e.printStackTrace();
                         }
 
