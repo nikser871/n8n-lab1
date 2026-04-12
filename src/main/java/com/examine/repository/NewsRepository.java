@@ -25,4 +25,7 @@ public interface NewsRepository extends JpaRepository<News, String> {
 
     @Query("UPDATE News n SET n.status = :status WHERE n.id IN (:ids)")
     void updateStatus(List<String> ids, EnrichmentStatus status);
+
+    @Query("UPDATE News n SET n.status = 'COMPLETED' WHERE n.status = 'IN_PROGRESS'")
+    void updateOrphanNews();
 }

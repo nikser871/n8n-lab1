@@ -53,6 +53,7 @@ public class NewsService {
                 repository.updateStatus(List.of(response.articleId()), EnrichmentStatus.COMPLETED);
             }
         }
+        repository.updateOrphanNews();
     }
 
     @Transactional
