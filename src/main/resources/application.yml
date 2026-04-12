@@ -41,6 +41,7 @@ jackson:
 
 open-router:
   api-key:
+  model:
 
 qwen:
   header: Сделай краткое саммари (3-5 предложений) по статьям и верни JSON, в котором будем id и summary для каждого объекта\n\n

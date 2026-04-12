@@ -38,6 +38,9 @@ public class QwenService {
     @Value("${open-router.api-key:''}")
     private String API_KEY;
 
+    @Value("${open-router.model:''}")
+    private String MODEL;
+
     private static final ObjectMapper mapper = new ObjectMapper();
 
     /**
@@ -80,7 +83,7 @@ public class QwenService {
         OpenAiChatModel model = OpenAiChatModel.builder()
                 .apiKey(API_KEY)
                 .baseUrl("https://openrouter.ai/api/v1")
-                .modelName("qwen/qwen3.6-plus:free")
+                .modelName(MODEL)
                 .timeout(ofSeconds(120))
                 .logResponses(true)
                 .responseFormat("json_object")
