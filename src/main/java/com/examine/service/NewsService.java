@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.*;
 
+import static com.examine.entity.enums.EnrichmentStatus.COMPLETED;
 import static com.examine.entity.enums.NewsType.PRICED;
 import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
@@ -55,7 +56,7 @@ public class NewsService {
             if (response != null && response.summary() != null) {
                 repository.updateWithSummary(response.articleId(), response.summary());
             } else if (response != null && response.articleId() != null){
-                repository.updateStatus(List.of(response.articleId()), EnrichmentStatus.COMPLETED);
+                repository.updateStatus(List.of(response.articleId()), COMPLETED);
             }
         }
         repository.updateOrphanNews();
@@ -79,7 +80,7 @@ public class NewsService {
         var pricedNews = news.stream()
                 .filter(article -> nonNull(article.getLink()) && article.getLink().contains(PRICED_DOMEN))
                 .toList();
-        pricedNews.forEach(vip -> vip.setType(PRICED));
+        pricedNews.forEach(vip -> vip.setType(PRICED).setStatus(COMPLETED));
         repository.saveAll(pricedNews);
     }
 

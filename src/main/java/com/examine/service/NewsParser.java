@@ -37,7 +37,7 @@ public class NewsParser {
             }
             return ParserUtil.extractBodyText(response);
         } catch (Exception e) {
-            System.err.println("Ошибка при загрузке " + url + ": " + e.getMessage());
+            System.err.println("Ошибка при загрузке " + url + " : " + e.getMessage());
             throw e;
         }
     }

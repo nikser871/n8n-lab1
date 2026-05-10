@@ -6,6 +6,7 @@ import com.examine.entity.enums.NewsType;
 import io.micronaut.serde.annotation.Serdeable;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.Accessors;
 
 import java.time.LocalDateTime;
 
@@ -14,6 +15,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Builder
+@Accessors(chain = true)
 @RequiredArgsConstructor
 @AllArgsConstructor
 @Serdeable
