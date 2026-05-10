@@ -4,6 +4,7 @@ import com.examine.dto.NewsDto;
 import com.examine.dto.NewsForEnrichment;
 import com.examine.dto.QwenResponse;
 import com.examine.entity.enums.EnrichmentStatus;
+import com.examine.entity.enums.NewsType;
 import com.examine.mapper.NewsMapper;
 import com.examine.repository.NewsRepository;
 import io.micronaut.transaction.annotation.Transactional;
@@ -12,7 +13,9 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.*;
 
+import static com.examine.entity.enums.NewsType.PRICED;
 import static java.util.Objects.isNull;
+import static java.util.Objects.nonNull;
 
 /**
  * Сервис для работы с новостями
@@ -24,6 +27,7 @@ public class NewsService {
     private final NewsMapper mapper;
     private final NewsRepository repository;
     private final QwenService qwenService;
+    private static final String PRICED_DOMEN = "pro.rbc.ru";
 
     @Transactional(readOnly = true)
     public List<NewsDto> findAll() {
@@ -33,6 +37,7 @@ public class NewsService {
     }
 
     public void enrichNewsWithSummaries() {
+        updateNewsType();
         List<NewsForEnrichment> newsToEnrich = lockNewsForProcessing();
 
         if (newsToEnrich.isEmpty()) return;
@@ -66,6 +71,16 @@ public class NewsService {
         repository.updateStatus(ids, EnrichmentStatus.IN_PROGRESS);
 
         return toProcess;
+    }
+
+    @Transactional
+    public void updateNewsType() {
+        var news = repository.findByStatus(EnrichmentStatus.NEW);
+        var pricedNews = news.stream()
+                .filter(article -> nonNull(article.getLink()) && article.getLink().contains(PRICED_DOMEN))
+                .toList();
+        pricedNews.forEach(vip -> vip.setType(PRICED));
+        repository.saveAll(pricedNews);
     }
 
 }

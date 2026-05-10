@@ -2,6 +2,7 @@ package com.examine.entity;
 
 import com.examine.dto.enums.Source;
 import com.examine.entity.enums.EnrichmentStatus;
+import com.examine.entity.enums.NewsType;
 import io.micronaut.serde.annotation.Serdeable;
 import jakarta.persistence.*;
 import lombok.*;
@@ -41,4 +42,8 @@ public class News {
     @Column(name = "enrichment_status")
     @Enumerated(EnumType.STRING)
     private EnrichmentStatus status = EnrichmentStatus.NEW;
+
+    @Column(name = "type")
+    @Enumerated(EnumType.STRING)
+    private NewsType type = NewsType.FREE;
 }

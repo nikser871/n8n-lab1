@@ -13,10 +13,12 @@ import java.util.List;
 @Repository
 public interface NewsRepository extends JpaRepository<News, String> {
 
+    List<News> findByStatus(EnrichmentStatus status);
+
     @Query(value = """
             SELECT n.id as id, n.link as link
             FROM News n
-            WHERE n.summary IS NULL AND n.status = 'NEW'
+            WHERE n.summary IS NULL AND n.status = 'NEW' AND n.type = "FREE"
         """)
     List<NewsForEnrichment> findNewsForAIEnrichment();
 

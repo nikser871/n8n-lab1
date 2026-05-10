@@ -71,15 +71,6 @@ public class QwenService {
                     })
                     .toList();
         }
-//        StringBuilder sb = new StringBuilder(HEADER_MESSAGE);
-//        for (String text : texts)
-//            sb.append(text);
-//
-//        try {
-//            return callQwenApi(sb.toString());
-//        } catch (JsonProcessingException e) {
-//            throw new RuntimeException(e);
-//        }
     }
 
     private QwenResponse callQwenApi(NewsForEnrichment item) throws JsonProcessingException {
@@ -109,23 +100,5 @@ public class QwenService {
 
         return mapper.readValue(json, QwenResponse.class);
     }
-
-//    private List<String> getAllArticlesTexts(List<NewsForEnrichment> news) {
-//        List<String> texts = new ArrayList<>();
-//        try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
-//            List<Future<String>> futures = news.stream()
-//                    .map(item -> executor.submit(() -> String.format(REQUEST_MESSAGE, item.id(), parser.getTextFromNew(item.link()))))
-//                    .toList();
-//
-//            futures.forEach(ft -> {
-//                try {
-//                    texts.add(ft.get());
-//                } catch (InterruptedException | ExecutionException e) {
-//                    throw new RuntimeException(e);
-//                }
-//            });
-//        }
-//        return texts;
-//    }
 
 }
